@@ -53,7 +53,7 @@
           ec2_win_password:
             region: "{{ ec2_region }}"
             instance_id: "{{ item.id }}"
-            key_file: "Matho_SSH_Jan2021.pem"
+            key_file: "daallan_SSH_0221.pem"
             wait: yes
             wait_timeout: 300
           with_items: "{{ windows_instances.results | map(attribute='tagged_instances') | list }}"
