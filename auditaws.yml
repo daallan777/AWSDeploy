@@ -1,0 +1,17 @@
+---
+# Play:   playbook.yml
+# Usage:  ansible-playbook -i 'TARGET,' ./playbook.yml -e "ROLE=<role>"TARGET=<n.n.n.n|host@fqdn>"
+# ansible-playbook -i 'localhost,' ./play.yml -e "ROLE=audit-s3-buckets"TARGET=localhost"USER=ubuntu"
+
+-   hosts:  localhost
+    gather_facts: False
+
+    vars:
+
+      role: audit-aws
+      ec2_report: true
+  
+
+    roles:
+    - { role: '{{ role }}' }
+    # - { role: send_email }

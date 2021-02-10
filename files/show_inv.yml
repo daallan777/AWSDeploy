@@ -1,0 +1,14 @@
+
+---
+# PLAY 1: 
+- name: Provision new AWS Windows Instances
+  hosts: localhost
+  gather_facts: false   
+    
+  tasks:
+  
+    - name: Show all inventory
+      debug:
+        msg: "{{ item }} {{ item }}"
+      with_inventory_hostnames:
+        - all

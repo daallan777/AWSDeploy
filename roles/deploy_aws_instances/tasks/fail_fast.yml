@@ -1,0 +1,26 @@
+---
+
+- name: grab boto version
+  command: python -c 'import boto3; print(boto3.__version__)'
+  register: py_cmd
+
+- name: make sure we are running correct boto version
+  assert:
+    that:
+      - py_cmd.stdout is version('1.7', operator='ge')
+    msg: "boto3 >= 1.7 is required."
+
+- name: Check if running from tower
+  assert:
+    that:
+      - admin_user is defined and admin_pass is defined
+  when: tower_job_id is defined
+
+
+- name: Check if not running from tower
+  assert:
+    that:
+      - admin_user is defined and admin_pass is defined
+  when: tower_job_id is not defined
+
+- name: Set the password 

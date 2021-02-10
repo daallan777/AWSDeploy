@@ -1,0 +1,10 @@
+#cloud-config
+hostname: {{linux_server_name + item}}
+manage_etc_hosts: true
+chpasswd: { expire: False }
+ssh_pwauth: True
+
+users: 
+  - name: arouser01
+    passwd: Ansilble123! 
+

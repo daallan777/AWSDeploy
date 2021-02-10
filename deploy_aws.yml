@@ -1,0 +1,79 @@
+
+---
+# PLAY 1: 
+- name: Provision new AWS Windows Instances
+  hosts: localhost
+  gather_facts: true
+
+  vars:
+    os_type: "windows"
+
+  tasks:
+
+
+    - set_fact:
+        create_date: "{{ ansible_date_time.epoch }}"
+      when: create_date is not defined
+
+
+    - include_role:
+        name: "deploy_aws_instances"
+
+
+# Play 2
+
+- name: Manage Newly Created Windows Instances
+  hosts: windows
+  gather_facts: false
+
+  vars:             
+    admin_pass: !vault |
+      $ANSIBLE_VAULT;1.1;AES256
+      62663262323564636665346237313739613138663964393234373232623437646338643961643535
+      3161373633313336663039643138643235656533633330370a623937376431383533393237336336
+      33656131343934326564636465356666636161386338396437396534623664383331646330393837
+      3339643163646463350a656566646139356363636339373966353032666431313532306361303931
+      6463
+
+ 
+    admin_user: hilfigert
+
+  tasks:
+
+    - name: Change the hostname to match inventory
+      win_hostname:
+        name: "{{ inventory_hostname }}"
+      register: hostname_result
+
+    - name: Reboot Windows Server if Required
+      win_reboot:
+      when: hostname_result.reboot_required
+
+    - name: Gather Operating System Information
+      setup:
+
+    - name: Show Host OS
+      debug:
+        msg: " {{ inventory_hostname }}  {{ ansible_os_name }}"
+
+
+    - name: Ensure admin_user is defined
+      assert:
+        that:
+        - admin_user is defined
+        - admin_pass is defined
+        msg: "Please ensure specified a valid admin_user and admin_pass"
+
+    - name: Create Admin User
+      win_user:
+        name: "{{ admin_user }}"
+        password: "{{ admin_pass }}"     # test this with Machine Password
+        groups:
+          - Administrators
+        state: present
+      when: admin_user is defined
+
+
+
+ 
+

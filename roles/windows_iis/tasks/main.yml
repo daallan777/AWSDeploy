@@ -1,0 +1,23 @@
+---
+
+  - name: install iis
+    win_feature:
+      name: Web-Server
+      state: present
+
+  - name: start iis service
+    win_service:
+      name: W3Svc
+      state: started
+    register: iis_service
+
+
+  - name: Create Website Content
+    win_template:
+      src: IIS_standard.j2
+      dest: "{{ iis_location }}"
+    register: iis_content
+
+  - name: print the ip address of windows server
+    debug:
+      msg: "website updated for http://{{ ansible_host }}"

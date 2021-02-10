@@ -1,0 +1,82 @@
+---
+#tasks file for audit-aws
+
+- name: delete report folder
+  file:
+    path: private
+    state: absent
+
+
+
+
+###################  Create EC2 Report  #####################
+
+- name: Generate EC2 Instance Report
+
+  block:
+
+    - name: Create Master EC2 Instance Spreadsheet
+      lineinfile:
+        dest: private/csv/ec2_results.csv
+        line: '"Image Id","Instance Id","Instance Type","Launch Time","Availability Zone","Private Ip Address","Public Ip Address","State", "Tags"'
+        create: yes
+        state: present
+        insertbefore: BOF
+      delegate_to: localhost
+
+
+    - include_tasks: ec2_report.yml
+      tags: ec2_report
+      with_items:
+        # - ap-northeast-3
+        - ap-southeast-2
+        # - ap-southeast-1
+        # - ap-northeast-1
+        # - ap-northeast-2
+        # - ap-east-1
+        # - ap-south-1
+        # - us-east-1
+        # - us-east-2
+        # - us-west-1
+        # - us-west-2
+
+
+      loop_control:
+        loop_var: ec2_region
+
+  when: ec2_report
+######################################################
+
+
+
+- name: Send the report via email
+  mail:
+    host: "{{  email_server }}"
+    port: "{{  email_port }}"
+    username: "{{ email_user }}"
+    password: "{{ email_pass }}"
+    from: "{{ email_user }}"
+    to: "{{ email_to }}"
+    subject: AWS EC2 Instance Report
+    body: Please find Your AWS Deployment Report Attached
+    attach:
+    - private/csv/ec2_results.csv
+    timeout: 120
+  delegate_to: localhost
+  ignore_errors: true
+  # when:
+  #   - send_by_email|bool
+
+  vars:
+
+    email_server: mail.aussiebroadband.com.au
+    email_port: 25
+    email_user: andrew.matheson@aussiebroadband.com.au
+    email_pass: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          38663466386432623364333638633435303165393830333036366130306339663239356263616434
+          3562316131353932613933373437326166326662303862390a316566326466613337653463373563
+          37366539623961386664653239353534643635613162363261386462333538653836386565626165
+          6339643233313337300a306265303031333434316238346264366336303839306131386162663335
+          3430
+    email_to: amatheso@redhat.com

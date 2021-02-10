@@ -1,0 +1,21 @@
+---
+# defaults file for aws_windows_iis
+iis_content: |
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Red Hat CI/CD Demo</title>
+  </head>
+  <body>
+      <img src="https://cdn.windowsreport.com/wp-content/uploads/2017/03/Microsoft-e1489226433498.png" width="222" height="148">
+      <p></p>
+      <hr>
+      <iframe src="https://www.redhat.com/en/technologies/management/ansible" width="100%" height="1000"></iframe>
+      <br>
+  </body>
+  </html>
+  
+iis_location: C:\Inetpub\wwwroot\index.html
