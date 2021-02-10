@@ -14,8 +14,8 @@ ec2_linux_instance_type: "t2.medium"
 ec2_windows_server_ami_type: win2016_full
 ec2_linux_instance_ami_type: rhel7
 ec2_region: ap-southeast-2
-ec2_ssh_key_name: Matho_SSH_Jan2021
-ec2_vpc_subnet_id: subnet-0b84c8d601ee3257d  #Demo_Subnet
+ec2_ssh_key_name: daallan_SSH_0221
+ec2_vpc_subnet_id: subnet-e46a8a82  #Demo_Subnet
 windows_ansible_connection: winrm
 linux_server_name: LinuxSvr
 win_server_name: WinSvr
