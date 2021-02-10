@@ -24,7 +24,7 @@ root_user: ec2-user
 windows_deploy_count: 2
 
 
-public_dns_zone: mathodemos.com
+public_dns_zone: redhatdaveallan.com
 
 
 # Windows WINRM connection parameters
