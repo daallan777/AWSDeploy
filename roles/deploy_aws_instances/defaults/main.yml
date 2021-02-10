@@ -17,9 +17,9 @@ ec2_region: ap-southeast-2
 ec2_ssh_key_name: Matho_SSH_Jan2021
 ec2_vpc_subnet_id: subnet-0b84c8d601ee3257d  #Demo_Subnet
 windows_ansible_connection: winrm
-linux_server_name: AndrewLinux
-win_server_name: AndrewWin
-app_name: "ANZ Tech Talk Test App"
+linux_server_name: LinuxSvr
+win_server_name: WinSvr
+app_name: "Default App"
 root_user: ec2-user
 windows_deploy_count: 2
 
