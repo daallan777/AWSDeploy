@@ -1,0 +1,26 @@
+
+---
+- name: Install IIS
+  #hosts filter used when coming from a provision template
+  hosts: "{{ hosts_filter_windows | default('all') }}"
+  gather_facts: true
+
+  tasks:
+
+    - include_role:
+        name: "windows_iis"
+      tags: install_iis
+
+    - include_role:
+        name: "windows_firewall"
+      tags: enable_firewall
+
+    #invoking from a workflow, then add a message for SNOW
+    - name: set stats
+      set_stats:
+        data:
+          snow_note: "{{ deploy_location |upper }} - Windows Servers Completed - IIS Installed"
+        
+    - name: Show webserver details
+      debug: 
+        msg: "The Server is available at http://{{ ansible_host }}"
