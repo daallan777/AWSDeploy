@@ -16,44 +16,44 @@
 
   tasks:
 
-- name: Azure | Remove instance
-  azure_rm_virtualmachine:
-    client_id: "{{ azure_client_id }}"
-    secret: "{{ azure_secret }}"
-    subscription_id: "{{ azure_subscription_id }}"
-    tenant: "{{ azure_tenant }}"
-    name: "{{ azure_server_name }}"
-    resource_group: "{{ azure_resource_group }}"
-    state: absent
-  register: azure_remove_job
-  async: 7200
-  poll: 0
+    - name: Azure | Remove instance
+      azure_rm_virtualmachine:
+        client_id: "{{ azure_client_id }}"
+        secret: "{{ azure_secret }}"
+        subscription_id: "{{ azure_subscription_id }}"
+        tenant: "{{ azure_tenant }}"
+        name: "{{ azure_server_name }}"
+        resource_group: "{{ azure_resource_group }}"
+        state: absent
+      register: azure_remove_job
+      async: 7200
+      poll: 0
 
+            
+    - name: AWS | Get WebApp instance information
+      ec2_instance_facts:
+        region: "{{ ec2_region }}"
+        filters:
+          # vpc-id: "{{ ec2_vpc_id }}"
+          "tag:App" : "Dave"
+      register: ec2_tower_instances
+
+    - name: AWS| Terminate WebApp Instances
+      ec2:
+        region: "{{ ec2_region }}"
+        state: "absent"
+        instance_ids: "{{ item.instances | map(attribute='instance_id') | list }}"
+      with_items:
+        - "{{ ec2_tower_instances }}"
+      ignore_errors: true
+
+      # Wait for tasks to complete
         
-- name: AWS | Get WebApp instance information
-  ec2_instance_facts:
-    region: "{{ ec2_region }}"
-    filters:
-      # vpc-id: "{{ ec2_vpc_id }}"
-      "tag:App" : "Dave"
-  register: ec2_tower_instances
-
-- name: AWS| Terminate WebApp Instances
-  ec2:
-    region: "{{ ec2_region }}"
-    state: "absent"
-    instance_ids: "{{ item.instances | map(attribute='instance_id') | list }}"
-  with_items:
-    - "{{ ec2_tower_instances }}"
-  ignore_errors: true
-
-  # Wait for tasks to complete
-    
-- name: Wait For Azure | Remove instance
-  async_status: jid="{{ item.ansible_job_id }}"
-  register: azure_instances
-  until: azure_instances.finished
-  retries: 300
-  with_items: 
-    - "{{ azure_remove_job }}"
-  ignore_errors: true
+    - name: Wait For Azure | Remove instance
+      async_status: jid="{{ item.ansible_job_id }}"
+      register: azure_instances
+      until: azure_instances.finished
+      retries: 300
+      with_items: 
+        - "{{ azure_remove_job }}"
+      ignore_errors: true
