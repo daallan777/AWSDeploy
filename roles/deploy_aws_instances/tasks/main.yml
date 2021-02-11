@@ -9,14 +9,14 @@
           ec2:
             key_name: "{{ ec2_ssh_key_name }}"
             group: 
-              - web_servers_SG
+              - demo_securitygroup
             instance_type: t2.medium
             exact_count: 1
             count_tag:
               Name: "{{ win_server_name + item }}"
             instance_tags:
               Name: "{{ win_server_name + item }}"
-              App: ANZ Tech Talk Test App
+              App: Daves Test App
               OS_Type: Windows
             image: "{{ ec2_ami_ids[ec2_windows_server_ami_type] }}"
             wait: true
