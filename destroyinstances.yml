@@ -35,7 +35,7 @@
   region: "{{ ec2_region }}"
   filters:
     # vpc-id: "{{ ec2_vpc_id }}"
-    "tag:App":"Daves Test App"
+    "tag:App" : "Daves Test App"
 register: ec2_tower_instances
 
 - name: AWS| Terminate WebApp Instances
