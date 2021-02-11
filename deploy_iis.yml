@@ -11,10 +11,6 @@
         name: "windows_iis"
       tags: install_iis
 
-    - include_role:
-        name: "windows_firewall"
-      tags: enable_firewall
-
     #invoking from a workflow, then add a message for SNOW
     - name: set stats
       set_stats:
