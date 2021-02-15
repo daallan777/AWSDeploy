@@ -31,7 +31,7 @@
 
             
     - name: AWS | Get WebApp instance information
-      ec2_instance_facts:
+      ec2_instance_info:
         region: "{{ ec2_region }}"
         filters:
           # vpc-id: "{{ ec2_vpc_id }}"
