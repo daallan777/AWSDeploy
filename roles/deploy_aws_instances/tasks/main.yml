@@ -16,7 +16,7 @@
               Name: "{{ win_server_name + item }}"
             instance_tags:
               Name: "{{ win_server_name + item }}"
-              App: Daves Test App
+              App: Dave
               OS_Type: Windows
             image: "{{ ec2_ami_ids[ec2_windows_server_ami_type] }}"
             wait: true
